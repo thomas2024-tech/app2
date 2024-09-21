@@ -1,0 +1,8 @@
+# List of Ignored Directories
+bin/
+include/
+lib/
+lib64/
+
+# List of Ignored Files
+pyvenv.cfg
