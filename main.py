@@ -1,16 +1,39 @@
-import redis
+from commlib.transports.redis import ConnectionParameters, Publisher
+from commlib.pubsub import PubSubMessage
+import os
+
+class VersionMessage(PubSubMessage):
+    """Message format for version updates."""
+    appname: str
+    version_number: str
 
 def publish_version(channel, appname, version_number):
-    # Connect to the local Redis instance
-    r = redis.Redis(host='localhost', port=6379, db=0)
-    
-    # Combine app name and version number into one message
-    message = f"{appname} version {version_number}"
-    
-    # Publish the message to the Redis channel
-    r.publish(channel, message)
-    
+    # Define connection parameters for Redis
+    redis_host = os.getenv('REDIS_HOST', 'localhost')
+    redis_port = int(os.getenv('REDIS_PORT', 6379))
+    redis_db = int(os.getenv('REDIS_DB', 0))
+
+    conn_params = ConnectionParameters(
+        host=redis_host,
+        port=redis_port,
+        db=redis_db
+    )
+
+    # Initialize the Publisher with the specific channel/topic
+    publisher = Publisher(
+        conn_params=conn_params,
+        topic=channel,
+        msg_type=VersionMessage
+    )
+
+    # Create a VersionMessage
+    message = VersionMessage(appname=appname, version_number=version_number)
+
+    # Publish the message
+    publisher.publish(message)
+
     print(f'Published version {version_number} of app {appname} to channel {channel}')
 
 if __name__ == "__main__":
-    publish_version('version_channel', 'app2', '1.2')
+    # Example usage
+    publish_version('version_channel', 'app2', '1.3')

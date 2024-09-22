@@ -1,11 +1,17 @@
 # Python 3.9 runtime as parent image
 FROM python:3.9-slim
 
-# Working directory in the container
+# Install git and other system dependencies
+RUN apt-get update && apt-get install -y git
+
+# Set the working directory in the container
 WORKDIR /app
 
 # Copy the requirements file into the container
 COPY requirements.txt ./
+
+# Upgrade pip (optional but recommended)
+RUN pip install --upgrade pip
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
