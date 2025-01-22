@@ -1,6 +1,6 @@
 services:
   app2:
-    image: 1234a4321/app2:1.1
+    image: 1234a4321/app2:1.2
     working_dir: /app
     volumes:
       - /path/on/host/docker-compose.yml:/app/docker-compose.yml
