@@ -254,13 +254,16 @@ if __name__ == "__main__":
         node_thread = threading.Thread(target=node.run, daemon=True)
         node_thread.start()
 
-        # Define dependencies, channel and version number
+        # Create the RPC service
+        service = DockerComposeRPCService(
+            node=node,
+            rpc_name='docker_compose_service_machine2'
+        )
+
+        # Version info publishing
         channel = 'version_channel'
-        version_number = "1.2"
-        dependencies = {
-            'app1': '1.1',
-            'app3': '1.1'
-        }
+        # No dependencies - updater has full control via APPS_TO_UPDATE configuration
+        dependencies = {}
 
         # First publish version to establish presence
         publish_version(channel, appname, version_number, redis_ip, dependencies)
