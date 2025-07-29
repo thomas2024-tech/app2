@@ -211,12 +211,10 @@ if __name__ == "__main__":
             rpc_name='docker_compose_service_machine2'
         )
 
-        # Example parameters for version info publishing
+        # Version info publishing
         channel = 'version_channel'
-        dependencies = {
-            'app1': '1.1',
-            'app3': '1.1'
-        }
+        # No dependencies - updater has full control via APPS_TO_UPDATE configuration
+        dependencies = {}
 
         # Publish the version message
         publish_version(channel, appname, version_number, redis_ip, dependencies)
